@@ -1,0 +1,16 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="/main.css">
+  </head>
+  <body>
+    <h1><%= course.title %></h1>
+    <% for (let iVideo in course.videos) {const videoObj = course.videos[iVideo]%>
+      <a href="<%= `/video/${semesterid}/${courseid}/${iVideo}` %>">
+        <div class="video basic-tile">
+          <p><%= videoObj.title %></p>
+          <p class="small-cable"><%= videoObj.description %></p>
+        </div>
+      </a>
+    <% } %>
+  </body>
+</html>

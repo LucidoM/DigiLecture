@@ -1,0 +1,101 @@
+<html>
+
+<head>
+    <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+    <script>
+        function setupMobile() {
+            const button = document.querySelector('.a-enter-vr-button')
+            const playButton = document.getElementById('play')
+            const pauseButton = document.getElementById('pause')
+
+            button.addEventListener('click', () => {
+                video.play()
+                play.setAttribute('visible', 'false')
+                pauseButton.setAttribute('visible', 'true')
+            })
+        }
+
+        function setupPlay() {
+            const playButton = document.getElementById('play')
+            const pauseButton = document.getElementById('pause')
+
+            function togglePlay() {
+                if (video.paused) {
+                    play.setAttribute('visible', 'false')
+                    pauseButton.setAttribute('visible', 'true')
+                    video.play()
+                } else {
+                    play.setAttribute('visible', 'true')
+                    pauseButton.setAttribute('visible', 'false')
+                    video.pause()
+                }
+            }
+
+            playButton.addEventListener('click', togglePlay)
+            pauseButton.addEventListener('click', togglePlay)
+        }
+
+        function setupJumps() {
+            const jumpForwards = document.getElementById('jumpForwards')
+            const jumpBackwards = document.getElementById('jumpBackwards')
+
+            jumpForwards.addEventListener('click', () => {
+                const destination = video.currentTime + 30
+                if (destination < video.duration) video.currentTime = destination
+                else video.currentTime = video.duration
+            })
+
+            jumpBackwards.addEventListener('click', () => {
+                const destination = video.currentTime - 30
+                if (destination >= 0) video.currentTime = destination
+                else video.currentTime = 0
+            })
+        }
+
+        AFRAME.registerComponent('enable-hooks', {
+            init: function () {
+                video = document.getElementById('lecture')
+                setupMobile()
+                setupPlay()
+                setupJumps()
+            }
+        })
+    </script>
+</head>
+
+<body>
+    <a-scene enable-hooks>
+        <a-assets>
+              <video id="lecture" src=<%= video.url %>></video>
+            <a-asset-item id="classroom" src="/scene.dae"></a-asset-item>
+        </a-assets>
+
+        <a-video src="#lecture" width="16" height="9" position="0 6 -16.5">
+            <a-entity id="jumpBackwards" position="-2 -3 0">
+                <a-triangle position="0 0 0.5" rotation="0 0 90"></a-triangle>
+                <a-triangle position="-0.5 0 0.45" rotation="0 0 90"></a-triangle>
+            </a-entity>
+
+            <a-entity id="play" position="0 -3 0">
+                <a-triangle position="0 0 0.5" rotation="0 0 270"></a-triangle>
+            </a-entity>
+
+            <a-entity id="pause" position="0 -3 0" visible="false">
+                <a-box width="0.4" depth="0.5" position="-0.3w 0 0"></a-box>
+                <a-box width="0.4" depth="0.5" position="0.3 0 0"></a-box>
+            </a-entity>
+
+            <a-entity id="jumpForwards" position="2 -3 0">
+                <a-triangle position="0 0 0.5" rotation="0 0 270"></a-triangle>
+                <a-triangle position="0.5 0 0.45" rotation="0 0 270"></a-triangle>
+            </a-entity>
+        </a-video>
+
+        <a-entity collada-model="#classroom" rotation="0 90 0" position="0.6 -1 -2"></a-entity>
+
+        <a-entity id="remote" laser-controls></a-entity>
+        <a-sky color="#5F2796"></a-sky>
+    </a-scene>
+</body>
+
+</html>

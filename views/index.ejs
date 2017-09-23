@@ -1,0 +1,16 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="/main.css">
+  </head>
+  <body>
+    <h1>Digi Lecture</h1>
+    <% for (iSemester in semesters){ const semester = semesters[iSemester];%>
+      <div class="basic-tile">
+        <h2><%= semester.semesterName %></h2>
+        <% for (iCourse in semester.courses) { const course = semester.courses[iCourse] %>
+          <a href="/course/<%= iSemester %>/<%= iCourse %>"><p><%= course.title %></p></a>
+        <% } %>
+      </div>
+    <% } %>
+  </body>
+</html>
